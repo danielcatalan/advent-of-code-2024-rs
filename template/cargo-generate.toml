@@ -1,0 +1,7 @@
+[template]
+ignore = ["input/input.txt", "target", "Cargo.lock"]
+
+[placeholders]
+year = {prompt = "Enter year", type = "string"}
+day = {prompt = "Enter day", type = "string"}
+ 
