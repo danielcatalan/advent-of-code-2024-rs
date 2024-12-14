@@ -10,15 +10,19 @@ pub fn parse_map<R: BufRead>(reader: R) -> Map {
 
     let mut antennas = Vec::new();
     let mut set_of_freqs = HashSet::new();
-    for (row, line) in lines.enumerate() {
-        let mut antennas_in_row = parse_to_antennas(row, &line.unwrap());
+    let mut row_limit = 0;
+    let mut col_limit = 0;
+    for (row, line) in lines.map(|s| s.unwrap()).enumerate() {
+        row_limit = row + 1;
+        col_limit = line.len();
+        let mut antennas_in_row = parse_to_antennas(row, &line);
 
         let _ = antennas_in_row
             .iter()
             .map(|a| set_of_freqs.insert(a.freq()));
         antennas.append(&mut antennas_in_row);
     }
-    Map::new(set_of_freqs, antennas)
+    Map::new(set_of_freqs, antennas, (row_limit, col_limit))
 }
 
 fn parse_to_antennas(row: usize, line: &str) -> Vec<Antenna> {
