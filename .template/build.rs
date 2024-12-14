@@ -4,8 +4,8 @@ use std::{
 };
 
 fn main() {
-    let year = 2024;
-    let day = 7;
+    let year = {{year}};
+    let day = {{day}};
     let url_day = format!("https://adventofcode.com/{}/day/{}/input", year, day);
 
     let mut f = File::open("../cookie.txt").unwrap();
