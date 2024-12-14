@@ -16,7 +16,7 @@ enum SolutionSolver {
 }
 
 fn main() {
-    let part = SolutionSolver::Part2;
+    let part = SolutionSolver::Part1;
 
     println!("Calculating solution...\n");
     let f = File::open("input/input.txt").unwrap();

@@ -35,6 +35,7 @@ impl Iterator for OpSetIter {
     }
 }
 
+#[derive(Debug)]
 pub enum Ops {
     Add,
     Mult,

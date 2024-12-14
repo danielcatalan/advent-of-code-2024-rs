@@ -19,16 +19,11 @@ impl Equation {
             panic!("Expected length of numbers and operations to be same")
         }
 
-        let mut ops = ops.iter();
-        let result: usize = self
-            .numbers
-            .iter()
-            .map(|num| *num)
-            .reduce(|acc, num| {
-                let op = ops.next().unwrap();
-                op.calc(&acc, &num)
-            })
-            .unwrap();
+        let mut ops_iter = ops.iter();
+        let result: usize = self.numbers.iter().map(|num| *num).fold(0, |acc, num| {
+            let op = ops_iter.next().unwrap();
+            op.calc(&acc, &num)
+        });
 
         if self.expected == result {
             return true;
