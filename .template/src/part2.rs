@@ -12,7 +12,7 @@ use std::io::BufRead;
  *
  */
 
-pub fn solve_solution<R: BufRead>(_reader: R) -> u32 {
+pub fn solve_solution<R: BufRead>(_reader: R) -> usize {
     1
 }
 
