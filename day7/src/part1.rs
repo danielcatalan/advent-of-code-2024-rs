@@ -14,7 +14,7 @@ use crate::{equation::Equation, operator::OpSetIter, parse::parse_to_equations};
  *
  */
 
-pub fn solve_solution<R: BufRead>(reader: R) -> u32 {
+pub fn solve_solution<R: BufRead>(reader: R) -> usize {
     let x: usize = reader
         .lines()
         .map(|line| parse_to_equations(&line.unwrap()))
@@ -22,20 +22,24 @@ pub fn solve_solution<R: BufRead>(reader: R) -> u32 {
         .map(|e| e.expected)
         .sum();
 
-    x as u32
+    x
 }
 
 fn possibly_true(eq: &Equation) -> bool {
     let len = eq.num_len();
 
     let opset_iter = OpSetIter::new(len);
+    let mut valid_counter = 0;
     for ops in opset_iter {
         if eq.valid_ops(&ops) {
-            return true;
+            valid_counter += 1;
         }
     }
 
-    false
+    match valid_counter {
+        0 => false,
+        i32::MIN..=-1_i32 | 1_i32..=i32::MAX => true,
+    }
 }
 
 #[cfg(test)]
