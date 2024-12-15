@@ -4,7 +4,7 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use std::io::BufRead;
 
-use crate::parse::parse_map;
+use crate::parse::parse_map1;
 
 /* Notes
  *
@@ -15,7 +15,7 @@ use crate::parse::parse_map;
  */
 
 pub fn solve_solution<R: BufRead>(reader: R) -> usize {
-    let map = parse_map(reader);
+    let map = parse_map1(reader);
 
     map.total_anitinode()
 }

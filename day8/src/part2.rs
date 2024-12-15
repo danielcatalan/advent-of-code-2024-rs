@@ -4,6 +4,8 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use std::io::BufRead;
 
+use crate::parse::parse_map2;
+
 /* Notes
  *
  * for regex use Lazy struct.
@@ -12,26 +14,36 @@ use std::io::BufRead;
  *
  */
 
-pub fn solve_solution<R: BufRead>(_reader: R) -> usize {
-    1
+pub fn solve_solution<R: BufRead>(reader: R) -> usize {
+    let map = parse_map2(reader);
+
+    map.total_anitinode()
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-//     use std::{io::BufReader, str::FromStr};
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::{io::BufReader, str::FromStr};
 
-//     #[test]
-//     fn test_solve() {
-//         let input = String::from_str(
-//             "some
-// lines
-// of
-// text",
-//         )
-//         .unwrap();
-//         let reader = BufReader::new(input.as_bytes());
-//         let _solution = solve_solution(reader);
-//         todo!("write an assertion")
-//     }
-// }
+    #[test]
+    fn test_solve() {
+        let input = String::from_str(
+            "............
+........0...
+.....0......
+.......0....
+....0.......
+......A.....
+............
+............
+........A...
+.........A..
+............
+............",
+        )
+        .unwrap();
+        let reader = BufReader::new(input.as_bytes());
+        let solution = solve_solution(reader);
+        assert_eq!(34, solution)
+    }
+}

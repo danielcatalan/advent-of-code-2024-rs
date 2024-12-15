@@ -10,4 +10,7 @@ impl Antenna {
     pub fn freq(&self) -> char {
         self.freq
     }
+    pub fn position(&self) -> &(usize, usize) {
+        &self.position
+    }
 }
