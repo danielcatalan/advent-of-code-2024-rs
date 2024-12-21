@@ -48,9 +48,13 @@ fn get_empty(empty_len: &u8) -> Vec<Option<usize>> {
 pub fn calc_checksum(filesystem: &[Option<usize>]) -> usize {
     let sum: usize = filesystem
         .iter()
-        .filter(|x| x.is_some())
         .enumerate()
-        .map(|(i, x)| i * x.unwrap())
+        .map(|(i, x)| {
+            i * match x {
+                Some(x) => *x,
+                None => 0,
+            }
+        })
         .sum();
 
     sum
