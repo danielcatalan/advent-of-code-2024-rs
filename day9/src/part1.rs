@@ -4,9 +4,7 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use std::io::BufRead;
 
-use crate::utils::{
-    calc_checksum, generate_filesystem, get_empty, get_files, parse_diskmap, rearange1,
-};
+use crate::utils::{calc_checksum, generate_filesystem, parse_diskmap, rearange1};
 
 /* Notes
  *
@@ -19,7 +17,7 @@ use crate::utils::{
 pub fn solve_solution<R: BufRead>(reader: R) -> usize {
     let diskmap: Vec<_> = parse_diskmap(reader);
 
-    let mut filesystem = generate_filesystem(diskmap);
+    let (mut filesystem, _) = generate_filesystem(diskmap);
 
     // rearange
     rearange1(&mut filesystem);
