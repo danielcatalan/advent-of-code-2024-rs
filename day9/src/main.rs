@@ -1,5 +1,6 @@
 mod part1;
 mod part2;
+mod utils;
 
 use std::{
     fs::File,
