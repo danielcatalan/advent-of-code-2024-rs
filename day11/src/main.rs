@@ -1,5 +1,7 @@
+mod parse;
 mod part1;
 mod part2;
+mod pluto_stones;
 
 use std::{
     fs::File,
@@ -17,7 +19,6 @@ fn main() {
 
     println!("Calculating solution...\n");
     let f = File::open("input/input.txt").unwrap();
-
     let reader = BufReader::new(f);
     solution(reader, part);
 
