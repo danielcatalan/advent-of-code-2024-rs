@@ -25,7 +25,7 @@ impl PlutoStones {
     }
 }
 
-fn change(stone: &usize) -> LinkedList<usize> {
+pub fn change(stone: &usize) -> LinkedList<usize> {
     if *stone == 0 {
         return LinkedList::from([1]);
     }
@@ -40,4 +40,21 @@ fn change(stone: &usize) -> LinkedList<usize> {
     let right: usize = number[x..length].parse().unwrap();
 
     return LinkedList::from([left, right]);
+}
+
+pub fn change2(stone: &usize) -> [Option<usize>; 2] {
+    if *stone == 0 {
+        return [Some(1), None];
+    }
+
+    let number = stone.to_string();
+    let length = number.len();
+    if (length % 2) == 1 {
+        return [Some(stone * 2024), None];
+    }
+    let x = length / 2;
+    let left: usize = number[0..x].parse().unwrap();
+    let right: usize = number[x..length].parse().unwrap();
+
+    return [Some(left), Some(right)];
 }
