@@ -2,7 +2,7 @@
 use once_cell::sync::Lazy;
 #[allow(unused_imports)]
 use regex::Regex;
-use std::io::BufRead;
+use std::{collections::HashSet, io::BufRead};
 
 use crate::parse::parse_map;
 
@@ -18,7 +18,12 @@ pub fn solve_solution<R: BufRead>(reader: R) -> usize {
     let map = parse_map(reader);
     let tailheads = get_trailhead_positions(&map);
 
-    let sum: usize = tailheads.iter().map(|start| traverse(&map, 0, start)).sum();
+    let mut sum: usize = 0;
+    for start in tailheads.iter() {
+        let mut heights_reached = HashSet::new();
+        traverse(&map, 0, start, &mut heights_reached);
+        sum += heights_reached.len();
+    }
 
     sum
 }
@@ -38,18 +43,50 @@ fn get_trailhead_positions(map: &Vec<Vec<u8>>) -> Vec<(usize, usize)> {
     x
 }
 
-fn traverse(map: &Vec<Vec<u8>>, current_height: usize, position: &(usize, usize)) -> usize {
-    let row = position.0 as isize;
-    let col = position.1 as isize;
+fn traverse(
+    map: &Vec<Vec<u8>>,
+    current_height: u8,
+    position: &(usize, usize),
+    heights_reached: &mut HashSet<(usize, usize)>,
+) {
+    if current_height == 9 {
+        heights_reached.insert(*position);
+    }
+    let choices = get_choices(map, current_height, position);
 
-    let choices = [
-        (row, col + 1),
-        (row + 1, col),
-        (row, col - 1),
-        (row - 1, col),
-    ];
+    for choice in choices {
+        traverse(&map, current_height + 1, &choice, heights_reached)
+    }
+}
 
-    todo!()
+fn get_choices(
+    map: &Vec<Vec<u8>>,
+    current_height: u8,
+    position: &(usize, usize),
+) -> Vec<(usize, usize)> {
+    let mut choices = Vec::new();
+    let row_last = map.len() - 1;
+    let col_last = map[0].len() - 1;
+    let row = position.0;
+    let col = position.1;
+    let next_height = current_height + 1;
+    // check right
+    if (col < col_last) && map[row][col + 1] == next_height {
+        choices.push((row, col + 1));
+    }
+    //check down
+    if (row < row_last) && map[row + 1][col] == next_height {
+        choices.push((row + 1, col));
+    }
+    //check left
+    if (col > 0) && map[row][col - 1] == next_height {
+        choices.push((row, col - 1));
+    }
+    //check up
+    if (row > 0) && map[row - 1][col] == next_height {
+        choices.push((row - 1, col));
+    }
+    choices
 }
 
 #[cfg(test)]
