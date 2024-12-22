@@ -1,11 +1,11 @@
 use std::collections::LinkedList;
 
 pub struct PlutoStones {
-    stones: LinkedList<usize>,
+    pub stones: LinkedList<usize>,
 }
 
 impl PlutoStones {
-    pub fn new<I: Iterator<Item = usize>>(stones: I) -> Self {
+    pub fn new(stones: Vec<usize>) -> Self {
         PlutoStones {
             stones: LinkedList::from_iter(stones),
         }
