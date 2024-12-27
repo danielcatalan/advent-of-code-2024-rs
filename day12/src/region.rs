@@ -1,4 +1,4 @@
-use std::collections::{HashSet, LinkedList, VecDeque};
+use std::collections::HashSet;
 
 use crate::garden::{Garden, Plant};
 
@@ -34,6 +34,16 @@ impl<'a> TotalRegions<'a> {
         }
         price
     }
+
+    pub fn get_pricing2(&self) -> usize {
+        let mut price = 0;
+        for region in &self.regions {
+            let area = region.area();
+            let corner_count = region.corner_count(self.garden);
+            price += area * corner_count;
+        }
+        price
+    }
 }
 
 pub struct Region {
@@ -62,14 +72,27 @@ impl Region {
             }
         }
     }
+
     fn area(&self) -> usize {
         self.plants.len()
     }
+
     fn parimeter(&self, garden: &Garden) -> usize {
         let mut fence_count = 0;
         for plant in &self.plants {
             fence_count += plant.get_fence_count(garden);
         }
         fence_count
+    }
+
+    fn corner_count(&self, garden: &Garden) -> usize {
+        let mut corner_count = 0;
+        for plant in &self.plants {
+            corner_count += plant.corner_count(garden, &self);
+        }
+        corner_count
+    }
+    pub fn contains(&self, plant: &Plant) -> bool {
+        self.plants.contains(plant)
     }
 }

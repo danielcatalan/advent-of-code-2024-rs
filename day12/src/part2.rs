@@ -22,7 +22,7 @@ pub fn solve_solution<R: BufRead>(reader: R) -> usize {
 
     total_regions.populate_regions(pool);
 
-    total_regions.get_pricing()
+    total_regions.get_pricing2()
 }
 
 #[cfg(test)]
@@ -70,6 +70,33 @@ MMMISSJEEE",
         )
         .unwrap();
         test(input, 1206)
+    }
+
+    #[test]
+    fn test_solve4() {
+        let input = String::from_str(
+            "EEEEE
+EXXXX
+EEEEE
+EXXXX
+EEEEE",
+        )
+        .unwrap();
+        test(input, 236)
+    }
+
+    #[test]
+    fn test_solve5() {
+        let input = String::from_str(
+            "AAAAAA
+AAABBA
+AAABBA
+ABBAAA
+ABBAAA
+AAAAAA",
+        )
+        .unwrap();
+        test(input, 368)
     }
 
     fn test(input: String, expected: usize) {

@@ -1,5 +1,7 @@
 use std::collections::{HashSet, LinkedList};
 
+use crate::{corner_helper::CornerHelper, region::Region};
+
 pub struct Garden {
     map: Vec<Vec<u8>>,
 }
@@ -31,6 +33,14 @@ impl Garden {
             }
         }
         None
+    }
+
+    pub fn get_isize(&self, row: isize, col: isize) -> Option<Plant> {
+        if row < 0 || col < 0 {
+            return None;
+        }
+
+        self.get(row as usize, col as usize)
     }
 
     pub fn generate_plant_pool(&self) -> HashSet<Plant> {
@@ -83,6 +93,7 @@ impl Plant {
         }
         neighbors
     }
+
     pub(crate) fn get_neighbors_in_kind(&self, garden: &Garden) -> Vec<Plant> {
         let binding = self.get_neighbors(garden);
         let neighbors = binding
@@ -95,6 +106,59 @@ impl Plant {
     pub fn get_fence_count(&self, garden: &Garden) -> usize {
         let neighbors = self.get_neighbors_in_kind(garden);
         4 - neighbors.len()
+    }
+
+    pub(crate) fn corner_count(&self, garden: &Garden, region: &Region) -> usize {
+        let row = self.position.0 as isize;
+        let col = self.position.1 as isize;
+        let mut corner_count = 0;
+        let mut corner_helper = CornerHelper::new(self.typ);
+        // start from top
+        let plant = garden.get_isize(row - 1, col);
+        corner_helper.push(plant, region);
+        // top left
+        let plant = garden.get_isize(row - 1, col - 1);
+        corner_helper.push(plant, region);
+        // left
+        let plant = garden.get_isize(row, col - 1);
+        corner_helper.push(plant, region);
+
+        if corner_helper.is_corner() {
+            corner_count += 1;
+        }
+
+        // bottom left
+        let plant = garden.get_isize(row + 1, col - 1);
+        corner_helper.push(plant, region);
+        // bottom
+        let plant = garden.get_isize(row + 1, col);
+        corner_helper.push(plant, region);
+
+        if corner_helper.is_corner() {
+            corner_count += 1;
+        }
+
+        // bottom right
+        let plant = garden.get_isize(row + 1, col + 1);
+        corner_helper.push(plant, region);
+        // right
+        let plant = garden.get_isize(row, col + 1);
+        corner_helper.push(plant, region);
+
+        if corner_helper.is_corner() {
+            corner_count += 1;
+        }
+        // top right
+        let plant = garden.get_isize(row - 1, col + 1);
+        corner_helper.push(plant, region);
+        // top
+        let plant = garden.get_isize(row - 1, col);
+        corner_helper.push(plant, region);
+
+        if corner_helper.is_corner() {
+            corner_count += 1;
+        }
+        corner_count
     }
 }
 

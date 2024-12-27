@@ -1,3 +1,4 @@
+mod corner_helper;
 mod garden;
 mod parse;
 mod part1;
@@ -16,7 +17,7 @@ enum SolutionSolver {
 }
 
 fn main() {
-    let part = SolutionSolver::Part1;
+    let part = SolutionSolver::Part2;
 
     println!("Calculating solution...\n");
     let f = File::open("input/input.txt").unwrap();
