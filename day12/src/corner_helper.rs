@@ -1,16 +1,12 @@
-use crate::{
-    garden::Plant,
-    region::{self, Region},
-};
+use crate::{garden::Plant, region::Region};
 
 pub struct CornerHelper {
-    typ: u8,
     value: u8,
 }
 
 impl CornerHelper {
-    pub fn new(typ: u8) -> Self {
-        CornerHelper { typ, value: 0 }
+    pub fn new() -> Self {
+        CornerHelper { value: 0 }
     }
 
     pub fn push(&mut self, plant: Option<Plant>, region: &Region) {

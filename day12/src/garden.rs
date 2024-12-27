@@ -1,4 +1,4 @@
-use std::collections::{HashSet, LinkedList};
+use std::collections::HashSet;
 
 use crate::{corner_helper::CornerHelper, region::Region};
 
@@ -13,14 +13,6 @@ impl Garden {
 
     pub fn add_row(&mut self, row: Vec<u8>) {
         self.map.push(row);
-    }
-
-    pub fn row_len(&self) -> usize {
-        self.map.len()
-    }
-
-    pub fn col_len(&self) -> usize {
-        self.map[0].len()
     }
 
     pub fn get(&self, row: usize, col: usize) -> Option<Plant> {
@@ -112,7 +104,7 @@ impl Plant {
         let row = self.position.0 as isize;
         let col = self.position.1 as isize;
         let mut corner_count = 0;
-        let mut corner_helper = CornerHelper::new(self.typ);
+        let mut corner_helper = CornerHelper::new();
         // start from top
         let plant = garden.get_isize(row - 1, col);
         corner_helper.push(plant, region);
