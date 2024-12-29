@@ -2,7 +2,16 @@
 use once_cell::sync::Lazy;
 #[allow(unused_imports)]
 use regex::Regex;
-use std::io::BufRead;
+use std::{
+    collections::{HashMap, HashSet},
+    io::{self, BufRead},
+};
+
+use crate::{
+    parse::parse_input,
+    quadrant::{QuadFinder, Quadrant},
+    robot::Robot,
+};
 
 /* Notes
  *
@@ -12,26 +21,43 @@ use std::io::BufRead;
  *
  */
 
-pub fn solve_solution<R: BufRead>(_reader: R) -> usize {
-    1
+pub fn solve_solution<R: BufRead>(reader: R) -> usize {
+    let robots = parse_input(reader);
+    let map = (101, 103);
+    solve_solution_impl(&robots, &map)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::{io::BufReader, str::FromStr};
+pub fn solve_solution_impl(robots: &Vec<Robot>, map: &(usize, usize)) -> usize {
+    let quadrant_finder = QuadFinder::new(map);
+    let mut seconds = 0;
+    loop {
+        let mut printer: Vec<Vec<u8>> = vec![vec![b'.'; map.0]; map.1];
 
-    #[test]
-    fn test_solve() {
-        let input = String::from_str(
-            "some
-lines
-of
-text",
-        )
-        .unwrap();
-        let reader = BufReader::new(input.as_bytes());
-        let _solution = solve_solution(reader);
-        todo!("write an assertion")
+        let position_iter: Vec<_> = robots
+            .iter()
+            .map(|robot| {
+                let pos = robot.get_position_at_x_sec(map, seconds);
+                printer[pos.1][pos.0] = b'*';
+                // quadrant_finder.get_quad(pos)
+                pos
+            })
+            .collect();
+        let mut set = HashSet::new();
+        let mut is_unique = true;
+        for position in position_iter {
+            if !set.insert(position) {
+                is_unique = false;
+                break;
+            }
+        }
+        if !is_unique {
+            seconds += 1;
+            continue;
+        } else {
+            for line in printer {
+                println!("{}", std::str::from_utf8(&line).unwrap());
+            }
+            return seconds;
+        }
     }
 }

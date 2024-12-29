@@ -1,5 +1,6 @@
 #[derive(Hash, Eq, PartialEq)]
 pub enum Quadrant {
+    None,
     TopLeft,
     TopRight,
     BottomLeft,
