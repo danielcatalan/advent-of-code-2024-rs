@@ -1,6 +1,7 @@
 mod input_parser;
 mod part1;
 mod part2;
+mod movement;
 
 use std::{
     fs::File,

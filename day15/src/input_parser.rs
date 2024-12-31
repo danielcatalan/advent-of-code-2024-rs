@@ -1,6 +1,8 @@
 use std::io::{BufRead, Lines};
 
-pub fn parser<R: BufRead>(reader: R) -> (Vec<Vec<u8>>, Vec<u8>){
+use crate::movement::{self, Movement};
+
+pub fn parser<R: BufRead>(reader: R) -> (Vec<Vec<u8>>, Vec<Movement>){
     let mut lines = reader.lines();
 
     let mut warehouse: Vec<Vec<u8>> = Vec::new();
@@ -26,10 +28,19 @@ fn parse_warehouse_line(line: &str) -> Option<Vec<u8>> {
     Some(row)
 }
 
-fn parse_movements<R: BufRead>(lines: Lines<R>) -> Vec<u8>{
+fn parse_movements<R: BufRead>(lines: Lines<R>) -> Vec<Movement>{
 
-    let x: Vec<u8> = lines.map(|line| line.unwrap()).flat_map(|line|{
-        line.as_bytes().to_owned()
+    let x: Vec<Movement> = lines.map(|line| line.unwrap()).flat_map(|line|{
+        let line: Vec<Movement> = line.as_bytes().iter().map(|c|{
+            match c {
+                b'^' => Movement::Up,
+                b'<' => Movement::Left,
+                b'>' => Movement::Right,
+                b'v' => Movement::Down,
+                _ => panic!()
+            }
+        }).collect();
+        line
     }).collect();
     x
 }
