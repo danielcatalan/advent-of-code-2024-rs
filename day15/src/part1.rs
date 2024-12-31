@@ -4,6 +4,8 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use std::io::BufRead;
 
+use crate::input_parser::parser;
+
 /* Notes
  *
  * for regex use Lazy struct.
@@ -12,8 +14,9 @@ use std::io::BufRead;
  *
  */
 
-pub fn solve_solution<R: BufRead>(_reader: R) -> usize {
-    0
+pub fn solve_solution<R: BufRead>(reader: R) -> usize {
+    let _ = parser(reader);
+    todo!()
 }
 
 #[cfg(test)]

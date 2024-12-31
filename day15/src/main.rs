@@ -1,3 +1,4 @@
+mod input_parser;
 mod part1;
 mod part2;
 
@@ -13,7 +14,7 @@ enum SolutionSolver {
 }
 
 fn main() {
-    let part = SolutionSolver::Part2;
+    let part = SolutionSolver::Part1;
 
     println!("Calculating solution...\n");
     let f = File::open("input/input.txt").unwrap();
