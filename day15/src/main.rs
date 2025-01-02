@@ -2,6 +2,8 @@ mod input_parser;
 mod part1;
 mod part2;
 mod movement;
+mod space;
+mod warehouse;
 
 use std::{
     fs::File,
