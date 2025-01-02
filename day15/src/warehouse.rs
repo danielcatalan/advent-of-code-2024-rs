@@ -9,4 +9,8 @@ impl Warehouse{
     pub fn new(robot_position: (usize,usize), warehouse_space: Vec<Vec<Space>>) -> Self{
         Warehouse{robot_position,warehouse_space}
     }
+
+    pub fn get_robot_position(&self) -> (usize,usize){
+        self.robot_position
+    }
 }
