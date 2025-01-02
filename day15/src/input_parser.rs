@@ -1,6 +1,6 @@
 use std::io::{BufRead, Lines};
 
-use crate::movement::{self, Movement};
+use crate::movement::Movement;
 
 pub fn parser<R: BufRead>(reader: R) -> (Vec<Vec<u8>>, Vec<Movement>){
     let mut lines = reader.lines();
