@@ -15,18 +15,22 @@ use crate::input_parser::parser;
  */
 
 pub fn solve_solution<R: BufRead>(reader: R) -> usize {
-    let _ = parser(reader);
-    todo!()
+    let (mut warehouse, movements) = parser(reader);
+
+    for movement in movements {
+        warehouse.move_robot(movement);
+    }
+
+    warehouse.sum_of_gps_coordinates()
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::input_parser;
 
     use super::*;
     use std::{io::BufReader, str::FromStr};
 
-    fn get_input() -> String{
+    fn get_input() -> String {
         String::from_str(
             "##########
 #..O..O.O#
@@ -58,14 +62,30 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^",
         let input = get_input();
         let reader = BufReader::new(input.as_bytes());
         let solution = solve_solution(reader);
-        assert_eq!(10092,solution);
+        assert_eq!(10092, solution);
+    }
+
+    fn get_input2() -> String {
+        String::from_str(
+            "########
+#..O.O.#
+##@.O..#
+#...O..#
+#.#.O..#
+#...O..#
+#......#
+########
+
+<^^>>>vv<v>>v<<",
+        )
+        .unwrap()
     }
 
     #[test]
-    fn test_parse(){
-        let input = get_input();
+    fn test_solve2() {
+        let input = get_input2();
         let reader = BufReader::new(input.as_bytes());
-        let (warehouse,movements) = parser(reader);
-        assert_eq!((4,4), warehouse.get_robot_position());
+        let solution = solve_solution(reader);
+        assert_eq!(2028, solution);
     }
 }

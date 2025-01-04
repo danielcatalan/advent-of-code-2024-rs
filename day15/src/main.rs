@@ -1,7 +1,7 @@
 mod input_parser;
+mod movement;
 mod part1;
 mod part2;
-mod movement;
 mod space;
 mod warehouse;
 
