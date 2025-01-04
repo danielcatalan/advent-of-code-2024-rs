@@ -1,6 +1,6 @@
 use std::io::{BufRead, Lines};
 
-use crate::{movement::Movement, space::Space, warehouse::Warehouse};
+use crate::{movement::Movement, space::Space, warehouse::Warehouse, warehouse2::Warehouse2};
 
 pub fn parser<R: BufRead>(reader: R) -> (Warehouse, Vec<Movement>) {
     let mut lines = reader.lines();
@@ -33,6 +33,58 @@ fn parse_warehouse<R: BufRead>(lines: &mut Lines<R>) -> (Vec<Vec<Space>>, (usize
                 b'@' => {
                     position = Some((r, c));
                     row.push(Space::Empty)
+                }
+                &a => panic!("Expected [. O # @], got {a}"),
+            }
+        }
+        warehouse.push(row);
+    }
+
+    (warehouse, position.unwrap())
+}
+
+pub fn parser2<R: BufRead>(reader: R) -> (Warehouse2, Vec<Movement>) {
+    let mut lines = reader.lines();
+
+    //parse warehouse
+    let (warehouse, position) = parse_warehouse2(&mut lines);
+
+    // parse movements
+    let movements = parse_movements(lines);
+    let warehouse = Warehouse2::new(position, warehouse);
+    (warehouse, movements)
+}
+
+fn parse_warehouse2<R: BufRead>(lines: &mut Lines<R>) -> (Vec<Vec<Space>>, (usize, usize)) {
+    let mut lines = lines.enumerate();
+    let mut warehouse: Vec<Vec<Space>> = Vec::new();
+    let mut position = Option::None;
+
+    // parse warehouse
+    while let Some((r, Ok(line))) = lines.next() {
+        if line.len() == 0 {
+            break;
+        }
+        let mut row = Vec::new();
+        for (c, ch) in line.as_bytes().iter().enumerate() {
+            match &ch {
+                b'.' => {
+                    row.push(Space::Empty);
+                    row.push(Space::Empty);
+                }
+                b'O' => {
+                    row.push(Space::BoxHead);
+                    row.push(Space::BoxTail);
+                }
+
+                b'#' => {
+                    row.push(Space::Wall);
+                    row.push(Space::Wall);
+                }
+                b'@' => {
+                    position = Some((2 * r, 2 * c));
+                    row.push(Space::Empty);
+                    row.push(Space::Empty);
                 }
                 &a => panic!("Expected [. O # @], got {a}"),
             }

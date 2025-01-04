@@ -4,6 +4,7 @@ mod part1;
 mod part2;
 mod space;
 mod warehouse;
+mod warehouse2;
 
 use std::{
     fs::File,
