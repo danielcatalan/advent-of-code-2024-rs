@@ -131,20 +131,8 @@ mod tests {
 
     use super::*;
 
-    fn create_warehouse() -> Warehouse2 {
-        let input = String::from_str(
-            "####################
-##[].......[].[][]##
-##[]...........[].##
-##[]........[][][]##
-##[]......[]....[]##
-##..##......[]....##
-##..[]............##
-##..@......[].[][]##
-##......[][]..[]..##
-####################",
-        )
-        .unwrap();
+    fn create_warehouse(input: &str) -> Warehouse2 {
+        let input = String::from_str(input).unwrap();
         let mut spaces = Vec::new();
         let mut robot_pos = None;
         for (row, line) in input.lines().enumerate() {
@@ -171,7 +159,17 @@ mod tests {
 
     #[test]
     fn test_sum_of_gps_coordinates() {
-        let warehouse = create_warehouse();
+        let input = "####################
+##[].......[].[][]##
+##[]...........[].##
+##[]........[][][]##
+##[]......[]....[]##
+##..##......[]....##
+##..[]............##
+##..@......[].[][]##
+##......[][]..[]..##
+####################";
+        let warehouse = create_warehouse(input);
 
         assert_eq!(9021, warehouse.sum_of_gps_coordinates())
     }
