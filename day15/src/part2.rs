@@ -4,7 +4,7 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use std::io::BufRead;
 
-use crate::input_parser::{parser, parser2};
+use crate::input_parser::parser2;
 
 /* Notes
  *

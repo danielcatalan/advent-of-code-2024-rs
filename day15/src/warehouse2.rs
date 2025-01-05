@@ -14,14 +14,34 @@ impl Warehouse2 {
     }
 
     pub fn move_robot(&mut self, movement: Movement) {
-        let pos = self.robot_position;
+        let new_position = movement.next_pos(self.robot_position);
 
-        if let Ok(new_pos) = self.move_object(pos, movement) {
-            self.robot_position = new_pos
+        let object = self.get_object(&new_position);
+        if let Space::Wall = object {
+            return; // do nothing
+        } else if let Space::Empty = object {
+            self.swap(self.robot_position, new_position);
+            return; // got to empty space
+        } else {
+            // if box present
+            match movement {
+                Movement::Left | Movement::Right => {
+                    if let Ok(new_pos) = self.move_object_lr(self.robot_position, movement) {
+                        self.robot_position = new_pos
+                    }
+                }
+                Movement::Up | Movement::Down => {
+                    if self.is_movable(&new_position, &movement) {
+                        if let Ok(new_pos) = self.move_object_ud(self.robot_position, movement) {
+                            self.robot_position = new_pos
+                        }
+                    }
+                }
+            }
         }
     }
 
-    fn move_object(
+    fn move_object_lr(
         &mut self,
         current_position: (usize, usize),
         movement: Movement,
@@ -33,13 +53,13 @@ impl Warehouse2 {
             return Err(()); // next position is Wall, do nothing
         } else if let Space::Empty = object {
             self.swap(current_position, new_position);
-            return Ok(new_position); // next position is Empty. do swap
+            return Ok(current_position); // next position is Empty. do swap
         } else {
             // Box
             //check if Box's next position is empty
-            if let Ok(_) = self.move_object(new_position, movement) {
+            if let Ok(_) = self.move_object_lr(new_position, movement) {
                 self.swap(current_position, new_position);
-                return Ok(new_position); // next position is Empty. do swap
+                return Ok(current_position); // next position is Empty. do swap
             } else {
                 return Err(());
             }
@@ -67,13 +87,47 @@ impl Warehouse2 {
         self.warehouse_space[r1][c1] = self.warehouse_space[r2][c2].clone();
         self.warehouse_space[r2][c2] = temp
     }
+
+    fn is_movable(&self, position: &(usize, usize), movement: &Movement) -> bool {
+        let object = self.get_object(position);
+
+        let (head_pos, tail_pos) = match object {
+            Space::Empty => {
+                return true;
+            }
+            Space::Wall => {
+                return false;
+            }
+            Space::BoxHead => {
+                let tail_pos = (position.0, position.1 + 1);
+                (*position, tail_pos)
+            }
+            Space::BoxTail => {
+                let head_pos = (position.0, position.1 - 1);
+                (head_pos, *position)
+            }
+            _ => panic!("Was not expecting Box"),
+        };
+
+        let next_head_pos = movement.next_pos(head_pos);
+        let next_tail_pos = movement.next_pos(tail_pos);
+
+        return self.is_movable(&next_head_pos, &movement)
+            && self.is_movable(&next_tail_pos, &movement);
+    }
+
+    fn move_object_ud(
+        &self,
+        current_pos: (usize, usize),
+        movement: Movement,
+    ) -> Result<(usize, usize), ()> {
+        todo!()
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use std::str::FromStr;
-
-    use crate::warehouse;
 
     use super::*;
 
