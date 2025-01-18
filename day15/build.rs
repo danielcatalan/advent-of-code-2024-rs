@@ -21,7 +21,7 @@ fn main() {
     let body = ureq::get(url_day.as_str())
         .set("Cookie", header_value.as_str())
         .call()
-        .unwrap()
+        .expect("Err occured. Check cookie")
         .into_string()
         .unwrap();
     let mut f = File::create("input/input.txt").unwrap();

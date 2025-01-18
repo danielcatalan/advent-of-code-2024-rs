@@ -26,7 +26,7 @@ impl Warehouse {
         current_position: (usize, usize),
         movement: Movement,
     ) -> Result<(usize, usize), ()> {
-        let new_position = movement.next_pos(current_position);
+        let new_position = movement.next_pos(&current_position);
         let object = self.get_object(&new_position);
 
         if let Space::Wall = object {

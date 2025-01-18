@@ -83,7 +83,7 @@ fn parse_warehouse2<R: BufRead>(lines: &mut Lines<R>) -> (Vec<Vec<Space>>, (usiz
                 }
                 b'@' => {
                     position = Some((2 * r, 2 * c));
-                    row.push(Space::Empty);
+                    row.push(Space::Robot);
                     row.push(Space::Empty);
                 }
                 &a => panic!("Expected [. O # @], got {a}"),

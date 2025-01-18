@@ -1,5 +1,7 @@
 mod input_parser;
+mod map;
 mod movement;
+mod object;
 mod part1;
 mod part2;
 mod space;
